@@ -1,5 +1,4 @@
 import mysql.connector
-import pandas as pd
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
@@ -34,23 +33,47 @@ for name in cursor.description:
     columns.append(name[0])
 attendanceDF1 = pd.DataFrame(attendance, columns=columns)
 attendanceDF1 = attendanceDF1.groupby("Reference", as_index=False).sum()[1:]
+print(attendanceDF1)
 
+sql2 = "SELECT events.Id as Event_ID, events.event_reference as Reference, event_types.name as Type, " \
+       "COUNT(DISTINCT attendee_session_tracking.attendeeId) as Attendance FROM ((events LEFT JOIN event_types ON " \
+       "events.event_type = event_types.Id) LEFT JOIN attendee_session_tracking ON attendee_session_tracking.eventId " \
+       "= events.Id) GROUP BY events.Id ORDER BY Type"
+cursor.execute(sql2)
+test = cursor.fetchall()
+testDF = pd.DataFrame(test)
+columns = []
+for name in cursor.description:
+    columns.append(name[0])
+testDF = pd.DataFrame(test, columns=columns)
+testDF = testDF.groupby("Type", as_index=False).count()
+print(testDF)
 # -------------------------------------------------------------------------------------
 app.layout = html.Div([
     html.H1(children='BookMeIn Dashboard'),
 
     html.Label(["Please Choose One or More Events"]),
-    dcc.Dropdown(
-        id='event_dropdown',
-        options=[{'label': i, 'value': i} for i in attendanceDF1["Reference"]],
-        value=['CISCO'],
-        multi=True,
-        clearable=False,
-        style={"width": "50%"}
-    ),
+    html.Div([
+        html.Div([
+            dcc.Dropdown(
+                id='event_dropdown',
+                options=[{'label': i, 'value': i} for i in attendanceDF1["Reference"]],
+                value=['CISCO'],
+                multi=True,
+                clearable=False)
+        ], className='six columns'),
+        html.Div([
+            dcc.Dropdown(
+                id='type_dropdown',
+                options=[{'label': i, 'value': i} for i in testDF["Type"]],
+                value=['Seminar'],
+                multi=True,
+                clearable=False)
+        ], className='six columns')
+    ]),
     html.Div([
         html.Div([dcc.Graph(id='Figure_1', )], className='six columns'),
-        html.Div([dcc.Graph(id='Figure_2', )], className="six columns")
+        html.Div([dcc.Graph(id='Figure_2', )], className='six columns')
     ]),
     html.Div("(c) CAD Group 6 - Keele University -  Built by Dash on Flask", style={"text-align": "center"})
 ], className='row')
@@ -58,14 +81,16 @@ app.layout = html.Div([
 
 # -------------------------------------------------------------------------------------
 @app.callback(
-    Output(component_id="Figure_1", component_property="figure"),
-    Output(component_id="Figure_2", component_property="figure"),
-    [Input(component_id="event_dropdown", component_property="value")]
+    [Output(component_id="Figure_1", component_property="figure"),
+     Output(component_id="Figure_2", component_property="figure")],
+    [Input(component_id="event_dropdown", component_property="value"),
+     Input(component_id="type_dropdown", component_property="value")]
 )
-def update_graph(my_dropdown):
-    dff = attendanceDF1[attendanceDF1["Reference"].isin(my_dropdown)]
+def update_graph(ev_dropdown, ty_dropdown):
+    dff = attendanceDF1[attendanceDF1["Reference"].isin(ev_dropdown)]
+    dff2 = testDF[testDF["Type"].isin(ty_dropdown)]
     figa = px.bar(dff, x="Reference", y='Attendance')
-    figb = px.bar(dff, x="Reference", y='Attendance')
+    figb = px.bar(dff2, x="Type", y='Attendance')
     return figa, figb
 
 
