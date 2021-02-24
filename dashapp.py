@@ -48,6 +48,18 @@ for name in cursor.description:
 testDF = pd.DataFrame(test, columns=columns)
 testDF = testDF.groupby("Type", as_index=False).count()
 print(testDF)
+sql3="SELECT events.Id as Event_ID, events.event_reference as Reference, event_types.name as Type, " \
+     "DATE_FORMAT(attendee_session_tracking.date_pinged, '%k %i') AS Time, " \
+     "COUNT(DISTINCT attendee_session_tracking.attendeeId) as Attendance FROM ((attendee_session_tracking " \
+     "LEFT JOIN events ON attendee_session_tracking.eventId = events.Id) LEFT JOIN event_types ON events.event_type " \
+     "= event_types.Id) GROUP BY Time"
+cursor.execute(sql3)
+attendance_time = cursor.fetchall()
+columns=[]
+for name in cursor.description:
+    columns.append(name[0])
+attendance_timeDF = pd.DataFrame(attendance_time, columns=columns)
+print(attendance_timeDF)
 # -------------------------------------------------------------------------------------
 app.layout = html.Div([
     html.H1(children='BookMeIn Dashboard'),
@@ -75,6 +87,19 @@ app.layout = html.Div([
         html.Div([dcc.Graph(id='Figure_1', )], className='six columns'),
         html.Div([dcc.Graph(id='Figure_2', )], className='six columns')
     ]),
+    html.Div([
+        html.Div([
+            dcc.Dropdown(
+                id='time_dropdown',
+                options=[{'label': i, 'value': i} for i in attendance_timeDF["Reference"].unique()],
+                value=['CISCO'],
+                multi=True,
+                clearable=False)
+        ], className='six columns'),
+    ]),
+    html.Div([
+        html.Div([dcc.Graph(id='Figure_3', )], className='twelve columns')
+    ]),
     html.Div("(c) CAD Group 6 - Keele University -  Built by Dash on Flask", style={"text-align": "center"})
 ], className='row')
 
@@ -82,16 +107,20 @@ app.layout = html.Div([
 # -------------------------------------------------------------------------------------
 @app.callback(
     [Output(component_id="Figure_1", component_property="figure"),
-     Output(component_id="Figure_2", component_property="figure")],
+     Output(component_id="Figure_2", component_property="figure"),
+     Output(component_id="Figure_3", component_property="figure")],
     [Input(component_id="event_dropdown", component_property="value"),
-     Input(component_id="type_dropdown", component_property="value")]
+     Input(component_id="type_dropdown", component_property="value"),
+     Input(component_id="time_dropdown", component_property="value")]
 )
-def update_graph(ev_dropdown, ty_dropdown):
+def update_graph(ev_dropdown, ty_dropdown, tm_dropdown):
     dff = attendanceDF1[attendanceDF1["Reference"].isin(ev_dropdown)]
     dff2 = testDF[testDF["Type"].isin(ty_dropdown)]
+    dff3 = attendance_timeDF[attendance_timeDF["Reference"].isin(tm_dropdown)]
     figa = px.bar(dff, x="Reference", y='Attendance')
     figb = px.bar(dff2, x="Type", y='Attendance')
-    return figa, figb
+    figc = px.line(dff3, x='Time', y='Attendance', color="Reference")
+    return figa, figb, figc
 
 
 # -------------------------------------------------------------------------------------
