@@ -85,19 +85,7 @@ app.layout = html.Div([
     ]),
     html.Div([
         html.Div([dcc.Graph(id='Figure_1', )], className='six columns'),
-        html.Div([dcc.Graph(id='Figure_2', )], className='six columns')
-    ]),
-    html.Div([
-        html.Div([
-            dcc.Dropdown(
-                id='time_dropdown',
-                options=[{'label': i, 'value': i} for i in attendance_timeDF["Reference"].unique()],
-                value=['CISCO'],
-                multi=True,
-                clearable=False)
-        ], className='six columns'),
-    ]),
-    html.Div([
+        html.Div([dcc.Graph(id='Figure_2', )], className='six columns'),
         html.Div([dcc.Graph(id='Figure_3', )], className='twelve columns')
     ]),
     html.Div("(c) CAD Group 6 - Keele University -  Built by Dash on Flask", style={"text-align": "center"})
@@ -110,13 +98,12 @@ app.layout = html.Div([
      Output(component_id="Figure_2", component_property="figure"),
      Output(component_id="Figure_3", component_property="figure")],
     [Input(component_id="event_dropdown", component_property="value"),
-     Input(component_id="type_dropdown", component_property="value"),
-     Input(component_id="time_dropdown", component_property="value")]
+     Input(component_id="type_dropdown", component_property="value")]
 )
-def update_graph(ev_dropdown, ty_dropdown, tm_dropdown):
+def update_graph(ev_dropdown, ty_dropdown):
     dff = attendanceDF1[attendanceDF1["Reference"].isin(ev_dropdown)]
     dff2 = testDF[testDF["Type"].isin(ty_dropdown)]
-    dff3 = attendance_timeDF[attendance_timeDF["Reference"].isin(tm_dropdown)]
+    dff3 = attendance_timeDF[attendance_timeDF["Reference"].isin(ev_dropdown)]
     figa = px.bar(dff, x="Reference", y='Attendance')
     figb = px.bar(dff2, x="Type", y='Attendance')
     figc = px.line(dff3, x='Time', y='Attendance', color="Reference")
@@ -127,3 +114,5 @@ def update_graph(ev_dropdown, ty_dropdown, tm_dropdown):
 
 if __name__ == '__main__':
     app.run_server(debug=False)
+
+# git push heroku master
