@@ -104,9 +104,9 @@ def update_graph(ev_dropdown, ty_dropdown):
     dff = attendanceDF1[attendanceDF1["Reference"].isin(ev_dropdown)]
     dff2 = testDF[testDF["Type"].isin(ty_dropdown)]
     dff3 = attendance_timeDF[attendance_timeDF["Reference"].isin(ev_dropdown)]
-    figa = px.bar(dff, x="Reference", y='Attendance')
+    figa = px.bar(dff, x="Reference", y='Attendance', title="Seminar Attendance")
     figb = px.bar(dff2, x="Type", y='Attendance')
-    figc = px.line(dff3, x='Time', y='Attendance', color="Reference")
+    figc = px.line(dff3, x='Time', y='Attendance', color="Reference", title="Seminar Attendance Against Time")
     return figa, figb, figc
 
 
