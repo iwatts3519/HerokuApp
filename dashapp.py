@@ -1,14 +1,13 @@
 import mysql.connector
 import dash
+import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 import plotly.express as px
 import pandas as pd
 
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 server = app.server
 
 mydb = mysql.connector.connect(
@@ -82,36 +81,69 @@ attendance_full = pd.concat([attendanceDF1, standDF1], ignore_index=True)
 print(attendance_full)
 # -------------------------------------------------------------------------------------
 app.layout = html.Div([
-    html.H1(children='BookMeIn Dashboard'),
-    html.Div([
-        html.Label(["Please Choose One or More Seminars"], className='six columns'),
-        html.Label(["Please Choose One or More Exhibitions"], className='six columns')
-    ]),
-    html.Div([
-        html.Div([
-            dcc.Dropdown(
-                id='event_dropdown',
-                options=[{'label': i, 'value': i} for i in attendanceDF1["Reference"]],
-                value=['AdEPT'],
-                multi=True,
-                clearable=False)
-        ], className='six columns'),
-        html.Div([
-            dcc.Dropdown(
-                id='stand_dropdown',
-                options=[{'label': i, 'value': i} for i in standDF1["Reference"]],
-                value=['CCS'],
-                multi=True,
-                clearable=False)
-        ], className='six columns'),
-    ]),
-    html.Div([
-        html.Div([dcc.Graph(id='Figure_1', )], className='six columns'),
-        html.Div([dcc.Graph(id='Figure_2', )], className='six columns'),
-        html.Div([dcc.Graph(id='Figure_3', )], className='twelve columns')
-    ]),
-    html.Div("(c) CAD Group 6 - Keele University -  Built by Dash on Flask", style={"text-align": "center"})
-], className='row')
+    dbc.Row(
+        dbc.Col(
+            html.H1("BookMeIn Dashboard"),
+            width=12
+        )
+    ),
+    dbc.Row(
+        [dbc.Col(
+            html.Label("Please Choose One or More Seminars"),
+            width=6
+        ),
+            dbc.Col(
+                html.Label("Please Choose One or More More Exhibitions"),
+                width=6
+            )]
+    ),
+
+    dbc.Row(
+        [
+            dbc.Col(
+                dcc.Dropdown(
+                    id='event_dropdown',
+                    options=[{'label': i, 'value': i} for i in attendanceDF1["Reference"]],
+                    value=['AdEPT'],
+                    multi=True,
+                    clearable=False),
+                width=6
+            ),
+            dbc.Col(
+                dcc.Dropdown(
+                    id='stand_dropdown',
+                    options=[{'label': i, 'value': i} for i in standDF1["Reference"]],
+                    value=['CCS'],
+                    multi=True,
+                    clearable=False),
+                width=6
+            )
+        ]),
+    dbc.Row(
+        [
+            dbc.Col(
+                dcc.Graph(id='Figure_1'),
+                width=6
+            ),
+            dbc.Col(
+                dcc.Graph(id='Figure_2'),
+                width=6
+            )
+        ]),
+    dbc.Row(
+        [
+            dbc.Col(
+                dcc.Graph(id='Figure_3'),
+                width=12
+            )
+        ]),
+
+    dbc.Row(
+        dbc.Col(
+            html.Div("(c) CAD Group 6 - Keele University -  Built by Dash on Flask", style={"text-align": "center"}))
+    )
+
+])
 
 
 # -------------------------------------------------------------------------------------
