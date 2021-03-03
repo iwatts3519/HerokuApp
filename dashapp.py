@@ -28,6 +28,7 @@ sql = "SELECT events.Id as Event_ID, events.event_reference as Reference, event_
       " = event_types.Id) GROUP BY events.Id"
 cursor.execute(sql)
 attendance = cursor.fetchall()
+print(attendance)
 columns = []
 for name in cursor.description:
     columns.append(name[0])
@@ -48,40 +49,61 @@ for name in cursor.description:
 testDF = pd.DataFrame(test, columns=columns)
 testDF = testDF.groupby("Type", as_index=False).count()
 print(testDF)
-sql3="SELECT events.Id as Event_ID, events.event_reference as Reference, event_types.name as Type, " \
-     "DATE_FORMAT(attendee_session_tracking.date_pinged, '%k %i') AS Time, " \
-     "COUNT(DISTINCT attendee_session_tracking.attendeeId) as Attendance FROM ((attendee_session_tracking " \
-     "LEFT JOIN events ON attendee_session_tracking.eventId = events.Id) LEFT JOIN event_types ON events.event_type " \
-     "= event_types.Id) GROUP BY Time"
+sql3 = "SELECT events.Id as Event_ID, events.event_reference as Reference, event_types.name as Type, " \
+       "DATE_FORMAT(attendee_session_tracking.date_pinged, '%k %i') AS Time, " \
+       "COUNT(DISTINCT attendee_session_tracking.attendeeId) as Attendance FROM ((attendee_session_tracking " \
+       "LEFT JOIN events ON attendee_session_tracking.eventId = events.Id) LEFT JOIN event_types ON events.event_type " \
+       "= event_types.Id) GROUP BY Time"
 cursor.execute(sql3)
 attendance_time = cursor.fetchall()
-columns=[]
+columns = []
 for name in cursor.description:
     columns.append(name[0])
 attendance_timeDF = pd.DataFrame(attendance_time, columns=columns)
 print(attendance_timeDF)
+
+sql4 = "SELECT events.Id as Event_ID, events.event_reference as Reference, event_types.name as Type, " \
+       "COUNT(DISTINCT stand_attendance.attendeeId) as Attendance FROM ((stand_attendance " \
+       "LEFT JOIN events ON stand_attendance.eventId = events.Id) LEFT JOIN event_types ON events.event_type" \
+       " = event_types.Id) GROUP BY events.Id"
+cursor.execute(sql4)
+stand = cursor.fetchall()
+print(stand)
+columns = []
+for name in cursor.description:
+    columns.append(name[0])
+standDF1 = pd.DataFrame(stand, columns=columns)
+standDF1 = standDF1.groupby("Reference", as_index=False).sum()[1:]
+print(standDF1)
+
+attendanceDF1["Type"] = "Seminar"
+standDF1["Type"] = "Exhibition Stand"
+attendance_full = pd.concat([attendanceDF1, standDF1], ignore_index=True)
+print(attendance_full)
 # -------------------------------------------------------------------------------------
 app.layout = html.Div([
     html.H1(children='BookMeIn Dashboard'),
-
-    html.Label(["Please Choose One or More Events"]),
+    html.Div([
+        html.Label(["Please Choose One or More Seminars"], className='six columns'),
+        html.Label(["Please Choose One or More Exhibitions"], className='six columns')
+    ]),
     html.Div([
         html.Div([
             dcc.Dropdown(
                 id='event_dropdown',
                 options=[{'label': i, 'value': i} for i in attendanceDF1["Reference"]],
-                value=['CISCO'],
+                value=['AdEPT'],
                 multi=True,
                 clearable=False)
         ], className='six columns'),
         html.Div([
             dcc.Dropdown(
-                id='type_dropdown',
-                options=[{'label': i, 'value': i} for i in testDF["Type"]],
-                value=['Seminar'],
+                id='stand_dropdown',
+                options=[{'label': i, 'value': i} for i in standDF1["Reference"]],
+                value=['CCS'],
                 multi=True,
                 clearable=False)
-        ], className='six columns')
+        ], className='six columns'),
     ]),
     html.Div([
         html.Div([dcc.Graph(id='Figure_1', )], className='six columns'),
@@ -98,14 +120,15 @@ app.layout = html.Div([
      Output(component_id="Figure_2", component_property="figure"),
      Output(component_id="Figure_3", component_property="figure")],
     [Input(component_id="event_dropdown", component_property="value"),
-     Input(component_id="type_dropdown", component_property="value")]
+     Input(component_id="stand_dropdown", component_property="value")]
 )
-def update_graph(ev_dropdown, ty_dropdown):
-    dff = attendanceDF1[attendanceDF1["Reference"].isin(ev_dropdown)]
-    dff2 = testDF[testDF["Type"].isin(ty_dropdown)]
+def update_graph(ev_dropdown, st_dropdown):
+    dff = attendance_full[(attendance_full["Reference"].isin(ev_dropdown)) & (attendance_full["Type"] == "Seminar")]
+    dff2 = attendance_full[
+        (attendance_full["Reference"].isin(st_dropdown)) & (attendance_full["Type"] == "Exhibition Stand")]
     dff3 = attendance_timeDF[attendance_timeDF["Reference"].isin(ev_dropdown)]
     figa = px.bar(dff, x="Reference", y='Attendance', title="Seminar Attendance")
-    figb = px.bar(dff2, x="Type", y='Attendance')
+    figb = px.bar(dff2, x="Reference", y='Attendance', title="Exhibition Attendance")
     figc = px.line(dff3, x='Time', y='Attendance', color="Reference", title="Seminar Attendance Against Time")
     return figa, figb, figc
 
