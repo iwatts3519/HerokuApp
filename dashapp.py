@@ -81,7 +81,7 @@ app.layout = html.Div([
     dbc.Row(
         dbc.Col(
             html.H1("BookMeIn Dashboard"),
-            width=12, offset=3
+            width=6, offset=3
 
         )
     ),
