@@ -81,8 +81,8 @@ app.layout = html.Div([
     dbc.Row(
         dbc.Col(
             html.H1("BookMeIn Dashboard"),
-            width={'size': 6, 'offset': 3}
-
+            width={'size': 6, 'offset': 3},
+            style={"text-align": "center"}
         )
     ),
     dbc.Row(
@@ -104,7 +104,8 @@ app.layout = html.Div([
                     options=[{'label': i, 'value': i} for i in attendanceDF1["Reference"]],
                     value=['AdEPT'],
                     multi=True,
-                    clearable=False),
+                    clearable=False,
+                    classname="dash-bootstrap"),
                 width=6
             ),
             dbc.Col(
@@ -113,7 +114,8 @@ app.layout = html.Div([
                     options=[{'label': i, 'value': i} for i in standDF1["Reference"]],
                     value=['CCS'],
                     multi=True,
-                    clearable=False),
+                    clearable=False,
+                    classname="dash-bootstrap"),
                 width=6
             )
         ]),
