@@ -115,7 +115,7 @@ app.layout = html.Div([
                     value=['CCS'],
                     multi=True,
                     clearable=False,
-                    classname="dash-bootstrap"),
+                    className="dash-bootstrap"),
                 width=6
             )
         ]),
