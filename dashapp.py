@@ -105,7 +105,7 @@ app.layout = html.Div([
                     value=['AdEPT'],
                     multi=True,
                     clearable=False,
-                    classname="dash-bootstrap"),
+                    className="dash-bootstrap"),
                 width=6
             ),
             dbc.Col(
