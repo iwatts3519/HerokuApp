@@ -7,7 +7,8 @@ from dash.dependencies import Input, Output
 import plotly.express as px
 import pandas as pd
 
-app = dash.Dash(__name__)
+app = dash.Dash(__name__,
+                external_stylesheets=[dbc.themes.SKETCHY])
 server = app.server
 
 mydb = mysql.connector.connect(
@@ -83,16 +84,16 @@ app.layout = html.Div([
             html.H1("BookMeIn Dashboard"),
             width={'size': 6, 'offset': 3},
             style={"text-align": "center"}
-        )
+        ),
     ),
     dbc.Row(
         [dbc.Col(
             html.Label("Please Choose One or More Seminars"),
-            width=6
+            width={"size": 5, "offset": 1}
         ),
             dbc.Col(
                 html.Label("Please Choose One or More More Exhibitions"),
-                width=6
+                width={"size": 5, "offset": 1}
             )]
     ),
 
@@ -104,8 +105,7 @@ app.layout = html.Div([
                     options=[{'label': i, 'value': i} for i in attendanceDF1["Reference"]],
                     value=['AdEPT'],
                     multi=True,
-                    clearable=False,
-                    className="dash-bootstrap"),
+                    clearable=False),
                 width=6
             ),
             dbc.Col(
@@ -114,8 +114,7 @@ app.layout = html.Div([
                     options=[{'label': i, 'value': i} for i in standDF1["Reference"]],
                     value=['CCS'],
                     multi=True,
-                    clearable=False,
-                    className="dash-bootstrap"),
+                    clearable=False),
                 width=6
             )
         ]),
@@ -140,7 +139,8 @@ app.layout = html.Div([
 
     dbc.Row(
         dbc.Col(
-            html.Div("(c) CAD Group 6 - Keele University -  Built by Dash on Flask", style={"text-align": "center"}))
+            html.Div("(c) CAD Group 6 - Keele University -  Built by Dash on Flask",
+                     style={"text-align": "center"}))
     )
 
 ])
