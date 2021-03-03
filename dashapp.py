@@ -7,7 +7,7 @@ from dash.dependencies import Input, Output
 import plotly.express as px
 import pandas as pd
 
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.DARKLY])
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 server = app.server
 
 mydb = mysql.connector.connect(
@@ -27,13 +27,12 @@ sql = "SELECT events.Id as Event_ID, events.event_reference as Reference, event_
       " = event_types.Id) GROUP BY events.Id"
 cursor.execute(sql)
 attendance = cursor.fetchall()
-print(attendance)
+
 columns = []
 for name in cursor.description:
     columns.append(name[0])
 attendanceDF1 = pd.DataFrame(attendance, columns=columns)
 attendanceDF1 = attendanceDF1.groupby("Reference", as_index=False).sum()[1:]
-print(attendanceDF1)
 
 sql2 = "SELECT events.Id as Event_ID, events.event_reference as Reference, event_types.name as Type, " \
        "COUNT(DISTINCT attendee_session_tracking.attendeeId) as Attendance FROM ((events LEFT JOIN event_types ON " \
@@ -47,7 +46,7 @@ for name in cursor.description:
     columns.append(name[0])
 testDF = pd.DataFrame(test, columns=columns)
 testDF = testDF.groupby("Type", as_index=False).count()
-print(testDF)
+
 sql3 = "SELECT events.Id as Event_ID, events.event_reference as Reference, event_types.name as Type, " \
        "DATE_FORMAT(attendee_session_tracking.date_pinged, '%k %i') AS Time, " \
        "COUNT(DISTINCT attendee_session_tracking.attendeeId) as Attendance FROM ((attendee_session_tracking " \
@@ -59,7 +58,6 @@ columns = []
 for name in cursor.description:
     columns.append(name[0])
 attendance_timeDF = pd.DataFrame(attendance_time, columns=columns)
-print(attendance_timeDF)
 
 sql4 = "SELECT events.Id as Event_ID, events.event_reference as Reference, event_types.name as Type, " \
        "COUNT(DISTINCT stand_attendance.attendeeId) as Attendance FROM ((stand_attendance " \
@@ -67,18 +65,17 @@ sql4 = "SELECT events.Id as Event_ID, events.event_reference as Reference, event
        " = event_types.Id) GROUP BY events.Id"
 cursor.execute(sql4)
 stand = cursor.fetchall()
-print(stand)
+
 columns = []
 for name in cursor.description:
     columns.append(name[0])
 standDF1 = pd.DataFrame(stand, columns=columns)
 standDF1 = standDF1.groupby("Reference", as_index=False).sum()[1:]
-print(standDF1)
 
 attendanceDF1["Type"] = "Seminar"
 standDF1["Type"] = "Exhibition Stand"
 attendance_full = pd.concat([attendanceDF1, standDF1], ignore_index=True)
-print(attendance_full)
+
 # -------------------------------------------------------------------------------------
 app.layout = html.Div([
     dbc.Row(
