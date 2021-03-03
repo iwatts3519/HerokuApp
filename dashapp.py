@@ -140,7 +140,7 @@ app.layout = html.Div([
 
     dbc.Row(
         dbc.Col(
-            html.Div("(c) CAD Group 6 - Keele University -  Built by Dash on Flask", style={"text-align": "center"}))
+            html.Footer("(c) CAD Group 6 - Keele University -  Built by Dash on Flask", style={"text-align": "center"}))
     )
 
 ])
