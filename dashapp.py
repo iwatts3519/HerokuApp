@@ -8,12 +8,10 @@ import plotly.express as px
 import plotly.io as pio
 import pandas as pd
 import os
-from PIL import Image
+
 from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
 import nltk
 from nltk.corpus import stopwords
-import matplotlib.pyplot as plt
-import base64
 
 assets_directory = os.getcwd() + '/assets/'
 nltk.download('stopwords')
@@ -117,7 +115,7 @@ messagesDF.dropna(inplace=True)
 messagesDF.drop_duplicates(inplace=True)
 
 
-def create_wordcloud(df, column=0):
+def create_wordcloud(df):
     messages_list = df["Message"].tolist()
     token_data = []
     stop_words = stopwords.words('english')
@@ -126,12 +124,10 @@ def create_wordcloud(df, column=0):
         token_data.append(tokens)
         token_data = [[word for word in doc if word not in stop_words] for doc in token_data]
     text_1 = ' '.join([str(ele) for ele in token_data])
-    print(text_1)
-    wordcloud = WordCloud(stopwords=STOPWORDS, width=1000, height=666).generate(text_1)
-    print(wordcloud)
+
+    wordcloud = WordCloud(stopwords=STOPWORDS, width=900, height=600).generate(text_1)
+
     wordcloud.to_file(assets_directory + "cloud.png")
-    # encoded_image = base64.b64encode(open(assets_directory + 'cloud.png', 'rb').read())
-    # return encoded_image
 
 
 # -------------------------------------------------------------------------------------
@@ -271,14 +267,13 @@ def update_graph(ev_dropdown, st_dropdown, gp_dropdown, mg_dropdown):
     dff3 = attendance_timeDF[attendance_timeDF["Reference"].isin(ev_dropdown)]
     dff4 = groupsDF[groupsDF["Organiser"].isin(gp_dropdown)]
     dff5 = messagesDF[messagesDF["Organiser"].isin(mg_dropdown)]
-    print(dff5.head())
     create_wordcloud(dff5)
     figa = px.bar(dff, x="Reference", y='Attendance', title="Seminar Attendance")
     figb = px.bar(dff2, x="Reference", y='Attendance', title="Exhibition Attendance")
     figc = px.line(dff3, x='Time', y='Attendance', color="Reference", title="Seminar Attendance Against Time")
     figd = px.bar(dff4, x="Organiser", y="Attendance", title="Attendance at Group Discussions")
-    # fige = html.Img(src="data:image/png;base64,{}".format(display_image.decode()))
     fige = '\\assets\\cloud.png'
+    # figf = px.imshow('\\assets\\cloud.png')
     return figa, figb, figc, figd, fige
 
 
