@@ -1,18 +1,14 @@
 import mysql.connector
-import dash
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 import plotly.express as px
-import plotly.io as pio
 import pandas as pd
+from app import app
+import plotly.io as pio
 
 pio.templates.default = "plotly_dark"
-
-app = dash.Dash(__name__,
-                external_stylesheets=[dbc.themes.DARKLY])
-server = app.server
 
 mydb = mysql.connector.connect(
     host="d3y0lbg7abxmbuoi.chr7pe7iynqr.eu-west-1.rds.amazonaws.com	",
@@ -96,11 +92,9 @@ layout = html.Div([
     [Input(component_id="event_dropdown", component_property="value")]
 )
 def display_graph(ev_dropdown):
-    print("Hello World")
     dff = attendanceDF1[attendanceDF1["Reference"].isin(ev_dropdown)]
     dff3 = attendance_timeDF[attendance_timeDF["Reference"].isin(ev_dropdown)]
 
     figa = px.bar(dff, x="Reference", y='Attendance', title="Seminar Attendance")
     figc = px.line(dff3, x='Time', y='Attendance', color="Reference", title="Seminar Attendance Against Time")
-    figa.show(), figc.show()
     return figa, figc

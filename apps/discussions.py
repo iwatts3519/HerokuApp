@@ -1,18 +1,14 @@
 import mysql.connector
-import dash
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 import plotly.express as px
-import plotly.io as pio
 import pandas as pd
+from app import app
+import plotly.io as pio
 
 pio.templates.default = "plotly_dark"
-
-app = dash.Dash(__name__,
-                external_stylesheets=[dbc.themes.DARKLY])
-server = app.server
 
 mydb = mysql.connector.connect(
     host="d3y0lbg7abxmbuoi.chr7pe7iynqr.eu-west-1.rds.amazonaws.com	",
