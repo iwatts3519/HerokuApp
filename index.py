@@ -7,25 +7,34 @@ import dash_bootstrap_components as dbc
 from app import app
 from app import server
 
-from apps import seminars, exhibitions, discussions
+from apps import seminars, exhibitions, discussions, welcome
 
 app.layout = html.Div([
 
-    dbc.Row(
-        dbc.Col(
-            html.H1("BookMeIn Dashboard"),
-            width={'size': 6, 'offset': 3},
-            style={"text-align": "center"}
-        )
-    ),
     dbc.Row([
         dbc.Col([
-            dcc.Link("Seminars ", href='/apps/seminars'),
-            dcc.Link("Exhibitions ", href='/apps/exhibitions'),
-            dcc.Link("Discussions ", href='/apps/discussions')
-        ])
+            dbc.NavbarSimple([
+                dbc.NavItem([
+                    dbc.Button(dbc.NavLink("Seminars ", href='/apps/seminars'), className="lg mx-2", color="primary")
+                ]),
+                dbc.NavItem([
+
+                    dbc.Button(dbc.NavLink("Exhibitions ", href='/apps/exhibitions'), className="lg mx-2",
+                               color="primary")
+                ]),
+                dbc.NavItem([
+                    dbc.Button(dbc.NavLink("Discussions ", href='/apps/discussions'), className="lg mx-2",
+                               color="primary")
+                ])
+            ],
+                brand="BookMeIn Analytics",
+                fluid=True,
+                dark=True,
+                color="primary")
+        ], width=12)
     ]),
-    dcc.Location(id="url", refresh=False, pathname=""),
+
+    dcc.Location(id="url", refresh=False, pathname="/apps/welcome"),
     html.Div(id='page-content', children=[]),
     dbc.Row(
         dbc.Col(
@@ -45,7 +54,7 @@ def display_page(pathname):
     if pathname == '/apps/discussions':
         return discussions.layout
     else:
-        return "404 Page Error: Please choose a link"
+        return welcome.layout
 
 
 if __name__ == '__main__':

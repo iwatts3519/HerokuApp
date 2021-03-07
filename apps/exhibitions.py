@@ -8,8 +8,6 @@ import pandas as pd
 from app import app
 import plotly.io as pio
 
-pio.templates.default = "plotly_dark"
-
 mydb = mysql.connector.connect(
     host="d3y0lbg7abxmbuoi.chr7pe7iynqr.eu-west-1.rds.amazonaws.com	",
     user="f6h3bik8fkz4m7ll",
@@ -65,7 +63,7 @@ layout = html.Div([
             )
         ])
 
-], style={"background-color": "#111111"})
+])
 
 
 # -------------------------------------------------------------------------------------
