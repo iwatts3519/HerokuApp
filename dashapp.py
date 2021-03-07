@@ -9,12 +9,12 @@ import plotly.io as pio
 import pandas as pd
 import os
 
-from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
-import nltk
-from nltk.corpus import stopwords
-
-assets_directory = os.getcwd() + '/assets/'
-nltk.download('stopwords')
+# from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
+# import nltk
+# from nltk.corpus import stopwords
+#
+# assets_directory = os.getcwd() + '/assets/'
+# nltk.download('stopwords')
 
 pio.templates.default = "plotly_dark"
 
@@ -107,27 +107,27 @@ sql6 = "SELECT exhibitor_message.message as Message, users.organisation as Organ
 cursor.execute(sql6)
 messages = cursor.fetchall()
 
-columns = []
-for name in cursor.description:
-    columns.append(name[0])
-messagesDF = pd.DataFrame(messages, columns=columns)
-messagesDF.dropna(inplace=True)
-messagesDF.drop_duplicates(inplace=True)
-
-
-def create_wordcloud(df):
-    messages_list = df["Message"].tolist()
-    token_data = []
-    stop_words = stopwords.words('english')
-    for message in messages_list:
-        tokens = message.split()
-        token_data.append(tokens)
-        token_data = [[word for word in doc if word not in stop_words] for doc in token_data]
-    text_1 = ' '.join([str(ele) for ele in token_data])
-
-    wordcloud = WordCloud(stopwords=STOPWORDS, width=900, height=600).generate(text_1)
-
-    wordcloud.to_file(assets_directory + "cloud.png")
+# columns = []
+# for name in cursor.description:
+#     columns.append(name[0])
+# messagesDF = pd.DataFrame(messages, columns=columns)
+# messagesDF.dropna(inplace=True)
+# messagesDF.drop_duplicates(inplace=True)
+#
+#
+# def create_wordcloud(df):
+#     messages_list = df["Message"].tolist()
+#     token_data = []
+#     stop_words = stopwords.words('english')
+#     for message in messages_list:
+#         tokens = message.split()
+#         token_data.append(tokens)
+#         token_data = [[word for word in doc if word not in stop_words] for doc in token_data]
+#     text_1 = ' '.join([str(ele) for ele in token_data])
+#
+#     wordcloud = WordCloud(stopwords=STOPWORDS, width=900, height=600).generate(text_1)
+#
+#     wordcloud.to_file(assets_directory + "cloud.png")
 
 
 # -------------------------------------------------------------------------------------
@@ -217,27 +217,27 @@ app.layout = html.Div([
                 width=6
             )
         ]),
-    dbc.Row(
-        [
-            dbc.Col(
-                dcc.Dropdown(
-                    id='message_dropdown',
-                    options=[{'label': i, 'value': i} for i in messagesDF["Organiser"].unique()],
-                    value=['Fordway'],
-                    multi=True,
-                    clearable=False,
-                    style={"color": '#222222'}),
-                width={"size": 6, "offset": 1}
-            )
-        ]),
-    dbc.Row(
-        [
-            dbc.Col(
-
-                html.Img(id="Figure_5", src="/assets/cloud.png"),
-                width={"size": 6, "offset": 1})
-
-        ]),
+    # dbc.Row(
+    #     [
+    #         dbc.Col(
+    #             dcc.Dropdown(
+    #                 id='message_dropdown',
+    #                 options=[{'label': i, 'value': i} for i in messagesDF["Organiser"].unique()],
+    #                 value=['Fordway'],
+    #                 multi=True,
+    #                 clearable=False,
+    #                 style={"color": '#222222'}),
+    #             width={"size": 6, "offset": 1}
+    #         )
+    #     ]),
+    # dbc.Row(
+    #     [
+    #         dbc.Col(
+    #
+    #             html.Img(id="Figure_5", src="/assets/cloud.png"),
+    #             width={"size": 6, "offset": 1})
+    #
+    #     ]),
 
     dbc.Row(
         dbc.Col(
@@ -253,28 +253,26 @@ app.layout = html.Div([
     [Output(component_id="Figure_1", component_property="figure"),
      Output(component_id="Figure_2", component_property="figure"),
      Output(component_id="Figure_3", component_property="figure"),
-     Output(component_id="Figure_4", component_property="figure"),
-     Output(component_id="Figure_5", component_property="figure")],
+     Output(component_id="Figure_4", component_property="figure")],
     [Input(component_id="event_dropdown", component_property="value"),
      Input(component_id="stand_dropdown", component_property="value"),
-     Input(component_id="group_dropdown", component_property="value"),
-     Input(component_id="message_dropdown", component_property="value")]
+     Input(component_id="group_dropdown", component_property="value")]
 )
-def update_graph(ev_dropdown, st_dropdown, gp_dropdown, mg_dropdown):
+def update_graph(ev_dropdown, st_dropdown, gp_dropdown):
     dff = attendance_full[(attendance_full["Reference"].isin(ev_dropdown)) & (attendance_full["Type"] == "Seminar")]
     dff2 = attendance_full[
         (attendance_full["Reference"].isin(st_dropdown)) & (attendance_full["Type"] == "Exhibition Stand")]
     dff3 = attendance_timeDF[attendance_timeDF["Reference"].isin(ev_dropdown)]
     dff4 = groupsDF[groupsDF["Organiser"].isin(gp_dropdown)]
-    dff5 = messagesDF[messagesDF["Organiser"].isin(mg_dropdown)]
-    create_wordcloud(dff5)
+    # dff5 = messagesDF[messagesDF["Organiser"].isin(mg_dropdown)]
+    # create_wordcloud(dff5)
     figa = px.bar(dff, x="Reference", y='Attendance', title="Seminar Attendance")
     figb = px.bar(dff2, x="Reference", y='Attendance', title="Exhibition Attendance")
     figc = px.line(dff3, x='Time', y='Attendance', color="Reference", title="Seminar Attendance Against Time")
     figd = px.bar(dff4, x="Organiser", y="Attendance", title="Attendance at Group Discussions")
-    fige = '\\assets\\cloud.png'
+    # fige = '\\assets\\cloud.png'
     # figf = px.imshow('\\assets\\cloud.png')
-    return figa, figb, figc, figd, fige
+    return figa, figb, figc, figd
 
 
 # -------------------------------------------------------------------------------------
