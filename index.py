@@ -5,6 +5,7 @@ import dash_bootstrap_components as dbc
 
 # Connect to main app.py file
 from app import app
+from app import server
 
 from apps import seminars, exhibitions, discussions, welcome
 
