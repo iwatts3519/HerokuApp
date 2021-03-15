@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>PHP Live MySQL Database Search</title>
 <style type="text/css">
-    body{
+    body{  
         font-family: Arail, sans-serif;
     }
     /* Formatting search box */
