@@ -6,7 +6,7 @@ sql = "SELECT * FROM attendee_session_tracking LEFT JOIN events ON events.id=att
        LEFT JOIN attendees ON attendees.id=attendee_session_tracking.attendeeid"
 
 try:
-    mydb = connection.connect(host="localhost", database='cad', user="root", passwd="")
+    mydb = connection.connect(host="localhost", database="cad", user="root", passwd="")
     df = pd.read_sql(sql, mydb)
     mydb.close()
 except Exception as e:
