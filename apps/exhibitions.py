@@ -9,10 +9,10 @@ from app import app
 import plotly.io as pio
 
 mydb = mysql.connector.connect(
-    host="d3y0lbg7abxmbuoi.chr7pe7iynqr.eu-west-1.rds.amazonaws.com	",
-    user="f6h3bik8fkz4m7ll",
-    passwd="t2rjjjnx0rndv1pk",
-    database="nh5x83ucdvxnlkqx"
+    host="localhost",
+    user="root",
+    passwd="",
+    database="bookmein"
 )
 
 cursor = mydb.cursor()

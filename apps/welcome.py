@@ -1,12 +1,5 @@
-import mysql.connector
 import dash_bootstrap_components as dbc
-import dash_core_components as dcc
 import dash_html_components as html
-from dash.dependencies import Input, Output
-import plotly.express as px
-import pandas as pd
-from app import app
-import plotly.io as pio
 
 # -------------------------------------------------------------------------------------
 layout = html.Div([
