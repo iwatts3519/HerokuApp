@@ -75,9 +75,3 @@ def update_graph(gp_dropdown):
     figd = px.bar(dff4, x="Organiser", y="Attendance", title="Attendance at Group Discussions")
 
     return figd
-
-
-# -------------------------------------------------------------------------------------
-
-if __name__ == '__main__':
-    app.run_server(debug=False)

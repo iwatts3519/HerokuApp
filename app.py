@@ -6,5 +6,6 @@ import dash_bootstrap_components as dbc
 external_scripts = ["https://code.jquery.com/jquery-1.12.4.min.js"]
 app = dash.Dash(__name__,
                 external_scripts=external_scripts,
-                external_stylesheets=[dbc.themes.LITERA])
+                external_stylesheets=[dbc.themes.LITERA],
+                suppress_callback_exceptions=True)
 server = app.server

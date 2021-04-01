@@ -84,8 +84,8 @@ layout = html.Div([
 
 # -------------------------------------------------------------------------------------
 @app.callback(
-    (Output(component_id="Figure_1", component_property="figure"),
-     Output(component_id="Figure_3", component_property="figure")),
+    [Output(component_id="Figure_1", component_property="figure"),
+     Output(component_id="Figure_3", component_property="figure")],
     [Input(component_id="event_dropdown", component_property="value")]
 )
 def display_graph(ev_dropdown):

@@ -44,7 +44,7 @@ layout = html.Div([
         [
             dbc.Col(
                 dcc.Dropdown(
-                    id='group_dropdown',
+                    id='group1_dropdown',
                     options=[{'label': i, 'value': i} for i in groupsDF["Organiser"].unique()],
                     value=['Xitagy'],
                     multi=True,
@@ -56,7 +56,7 @@ layout = html.Div([
     dbc.Row(
         [
             dbc.Col(
-                dcc.Graph(id='Figure_4'),
+                dcc.Graph(id='Figure_8'),
                 width=6
             )
         ]),
@@ -66,8 +66,8 @@ layout = html.Div([
 
 # -------------------------------------------------------------------------------------
 @app.callback(
-    Output(component_id="Figure_4", component_property="figure"),
-    [Input(component_id="group_dropdown", component_property="value")]
+    Output(component_id="Figure_8", component_property="figure"),
+    [Input(component_id="group1_dropdown", component_property="value")]
 )
 def update_graph(gp_dropdown):
     dff4 = groupsDF[groupsDF["Organiser"].isin(gp_dropdown)]
@@ -75,9 +75,3 @@ def update_graph(gp_dropdown):
     figd = px.bar(dff4, x="Organiser", y="Attendance", title="Attendance at Group Discussions")
 
     return figd
-
-
-# -------------------------------------------------------------------------------------
-
-if __name__ == '__main__':
-    app.run_server(debug=False)
