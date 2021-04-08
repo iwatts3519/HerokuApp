@@ -4,3 +4,7 @@ venv
 .DS_Store
 saveactions_settings.xml
 env
+script.js
+style.css
+.php
+php

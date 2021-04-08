@@ -7,8 +7,7 @@ import dash_bootstrap_components as dbc
 from app import app
 from app import server
 
-from apps import seminars, discussions, welcome, exhibitions, table
-from apps import table
+from apps import seminars, discussions, welcome, exhibitions, wordclouds
 
 app.layout = html.Div([
 
@@ -27,8 +26,9 @@ app.layout = html.Div([
                     dbc.Button(dbc.NavLink("Discussions ", href='/apps/discussions'), className="lg mx-2",
                                color="primary")
                 ]),
+
                 dbc.NavItem([
-                    dbc.Button(dbc.NavLink("Table ", href='/apps/table'), className="lg mx-2",
+                    dbc.Button(dbc.NavLink("Wordclouds ", href='/apps/wordclouds'), className="lg mx-2",
                                color="primary")
                 ])
             ],
@@ -55,12 +55,12 @@ app.layout = html.Div([
 def display_page(pathname):
     if pathname == '/apps/seminars':
         return seminars.layout
-    elif pathname == '/apps/exhibitions':
+    if pathname == '/apps/exhibitions':
         return exhibitions.layout
-    elif pathname == '/apps/discussions':
+    if pathname == '/apps/discussions':
         return discussions.layout
-    elif pathname == '/apps/table':
-        return table.layout
+    if pathname == '/apps/wordclouds':
+        return wordclouds.layout
     else:
         return welcome.layout
 
