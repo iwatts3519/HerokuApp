@@ -6,10 +6,9 @@ from dash.dependencies import Input, Output
 import plotly.express as px
 import pandas as pd
 from app import app
-import plotly.io as pio
 
 mydb = mysql.connector.connect(
-    host="d3y0lbg7abxmbuoi.chr7pe7iynqr.eu-west-1.rds.amazonaws.com	",
+    host="d3y0lbg7abxmbuoi.chr7pe7iynqr.eu-west-1.rds.amazonaws.com",
     user="f6h3bik8fkz4m7ll",
     passwd="t2rjjjnx0rndv1pk",
     database="nh5x83ucdvxnlkqx"
@@ -85,8 +84,8 @@ layout = html.Div([
 
 # -------------------------------------------------------------------------------------
 @app.callback(
-    (Output(component_id="Figure_1", component_property="figure"),
-     Output(component_id="Figure_3", component_property="figure")),
+    [Output(component_id="Figure_1", component_property="figure"),
+     Output(component_id="Figure_3", component_property="figure")],
     [Input(component_id="event_dropdown", component_property="value")]
 )
 def display_graph(ev_dropdown):

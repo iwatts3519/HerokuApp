@@ -7,7 +7,7 @@ import dash_bootstrap_components as dbc
 from app import app
 from app import server
 
-from apps import seminars, exhibitions, discussions, welcome
+from apps import seminars, discussions, welcome, exhibitions, wordclouds
 
 app.layout = html.Div([
 
@@ -25,9 +25,15 @@ app.layout = html.Div([
                 dbc.NavItem([
                     dbc.Button(dbc.NavLink("Discussions ", href='/apps/discussions'), className="lg mx-2",
                                color="primary")
+                ]),
+
+                dbc.NavItem([
+                    dbc.Button(dbc.NavLink("Wordclouds ", href='/apps/wordclouds'), className="lg mx-2",
+                               color="primary")
                 ])
             ],
                 brand="BookMeIn Analytics",
+                brand_href="welcome.layout",
                 fluid=True,
                 dark=True,
                 color="primary")
@@ -53,6 +59,8 @@ def display_page(pathname):
         return exhibitions.layout
     if pathname == '/apps/discussions':
         return discussions.layout
+    if pathname == '/apps/wordclouds':
+        return wordclouds.layout
     else:
         return welcome.layout
 
