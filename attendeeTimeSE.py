@@ -18,7 +18,6 @@ except Exception as e:
 uniqueAtenId = set(df['attendeeid'])
 uniqueEventId = set(df['eventid'])
 
-
 attendeeTimeDic = {'id': [], 'length': []}
 
 # for every event, gets all unique attendee ids at that event. Finds out how long each were at that event
@@ -44,10 +43,10 @@ for i in uniqueEventId:
                 first = False
             else:
                 continue
-        
+
         timeTwo = row[1]
         diff = timeTwo - timeOne
-        
+
         attendeeTimeDic['id'].append(i)
         attendeeTimeDic['length'].append(diff)
 
