@@ -19,7 +19,7 @@ cursor = mydb.cursor()
 cursor.execute("SHOW TABLES")
 tables = cursor.fetchall()
 
-sql4 = "SELECT events.Id as Event_ID, events.event_reference as Reference, event_types.name as Type, " \
+sql4 = "SELECT events.Id as Event_ID, events.event_reference as Exhibition, event_types.name as Type, " \
        "COUNT(DISTINCT stand_attendance.attendeeId) as Attendance FROM ((stand_attendance " \
        "LEFT JOIN events ON stand_attendance.eventId = events.Id) LEFT JOIN event_types ON events.event_type" \
        " = event_types.Id) GROUP BY events.Id"
@@ -30,7 +30,7 @@ columns = []
 for name in cursor.description:
     columns.append(name[0])
 standDF1 = pd.DataFrame(stand, columns=columns)
-standDF1 = standDF1.groupby("Reference", as_index=False).sum()[1:]
+standDF1 = standDF1.groupby("Exhibition", as_index=False).sum()[1:]
 
 # -------------------------------------------------------------------------------------
 layout = html.Div([
@@ -47,7 +47,7 @@ layout = html.Div([
             dbc.Col(
                 dcc.Dropdown(
                     id='stand_dropdown',
-                    options=[{'label': i, 'value': i} for i in standDF1["Reference"]],
+                    options=[{'label': i, 'value': i} for i in standDF1["Exhibition"]],
                     value=['CCS'],
                     multi=True,
                     clearable=False,
@@ -73,7 +73,7 @@ layout = html.Div([
 )
 def update_graph(st_dropdown):
     dff2 = standDF1[
-        (standDF1["Reference"].isin(st_dropdown))]
+        (standDF1["Exhibition"].isin(st_dropdown))]
 
     figb = px.bar(dff2, x="Exhibition", y='Attendance', title="Exhibition Attendance")
 
