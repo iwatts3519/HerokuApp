@@ -75,6 +75,6 @@ def update_graph(st_dropdown):
     dff2 = standDF1[
         (standDF1["Reference"].isin(st_dropdown))]
 
-    figb = px.bar(dff2, x="Reference", y='Attendance', title="Exhibition Attendance")
+    figb = px.bar(dff2, x="Exhibition", y='Attendance', title="Exhibition Attendance")
 
     return figb
