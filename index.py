@@ -9,7 +9,6 @@ from app import server
 
 from apps import seminars, discussions, welcome, exhibitions, wordclouds
 
-print("Hello")
 app.layout = html.Div([
 
     dbc.Row([
