@@ -6,27 +6,34 @@ layout = html.Div([
     dbc.Row(
         [
             dbc.Col(
-                html.P("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis vitae nibh quis neque tincidunt "
-                       "interdum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a orci vitae "
-                       "tortor ultricies tempus aliquam in tortor. Ut sit amet lacus mi. Ut nisl ex, interdum id "
-                       "faucibus vel, placerat eu nisi. Sed in elit pellentesque, tempor lorem eu, consectetur "
-                       "lectus. Vestibulum bibendum risus sodales nisi hendrerit, et dictum leo mattis.")
+                html.P(
+                    "Following the recent pandemic many companies have been forced to reform their business models in "
+                    "order to cater to a now remote form of work.  While this allows companies to record a good "
+                    "amount of data about events, speakers and attendees,  in this situation it is more difficult to "
+                    "gauge which forms of data are significant and what this data suggests. ")
             )
 
         ]),
     dbc.Row(
         [
             dbc.Col(
-                html.P("Proin lorem sem, pellentesque non sagittis quis, maximus sed ante. In ut ex fringilla, "
-                       "ultrices urna non, dictum eros. Praesent non pretium tortor. Suspendisse vulputate leo "
-                       "fermentum orci lacinia, ut consectetur enim elementum. Phasellus turpis nisi, imperdiet vitae "
-                       "neque nec, eleifend volutpat eros. Sed quis augue sapien. Integer mauris leo, "
-                       "pharetra interdum diam tincidunt, sodales aliquam purus. Praesent enim felis, molestie a "
-                       "porttitor nec, porttitor eu lacus. Aenean a enim non lectus pretium euismod. Suspendisse "
-                       "sollicitudin et felis id efficitur. Aenean id ipsum eu nunc eleifend sagittis. Vestibulum "
-                       "tincidunt nisl mauris, vel lacinia dui posuere quis. Donec venenatis diam eget tortor "
-                       "lobortis congue. Nullam vehicula ligula nec luctus sagittis. Ut quis dolor eu diam viverra "
-                       "malesuada id ac ipsum.")
+                html.P(
+                    "This app prototype provides a method of obtaining information on attendees and sponsors of "
+                    "virtual conference and exhibition models and separating the information to help form "
+                    "conclusions. This specifically looks at the data regarding seminar and exhibition attendance, "
+                    "discussions and provides word clouds of the most discussed topics within messages among "
+                    "attendees.")
+
+            )
+
+        ]),
+    dbc.Row(
+        [
+            dbc.Col(
+                html.P(
+                    "The aim of this app is to provide an easier method of drawing conclusions from the data which in "
+                    "turn will allow the company to discern which parts of the conferences are most successful in "
+                    "attracting and retaining attendees and sponsors.")
 
             )
 
